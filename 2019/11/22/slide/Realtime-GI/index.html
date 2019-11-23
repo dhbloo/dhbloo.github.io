@@ -1,0 +1,663 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Realtime GI Introduction"><meta name="keywords" content="实时渲染,GI"><meta name="author" content="dhbloo,1084714805@qq.com"><meta name="copyright" content="dhbloo"><title>Realtime GI Introduction | dhb's Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.8.0/css/reveal.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.8.0/css/theme/black.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.8.0/lib/css/zenburn.min.css"></head><body><div class="reveal"><div class="slides"><section data-markdown data-separator="====" data-separator-vertical="==" data-charset="utf-8"><script type="text/template">
+# Realtime GI In Games
+
+Notes:
+
+内容主要来自EA Seed团队在17年Siggraph上关于GI的综述性talk
+
+====
+
+<!-- .slide: data-background="#2874A6" -->
+
+### 提纲
+
++ GI在游戏中的发展
+  + Precomputation
+  + Volume based methods
+  + Local Approximation
++ 当前方法的问题
++ 未来游戏的GI
+
+<!--~~附加：体素游戏的GI，Minecraft~~-->
+
+====
+
+### What's GI
+
+==
+
+![Picture from NVIDIA](/images/x2-direct-villa.jpg)
+
+Direct illumination only
+
+==
+
+![Picture from NVIDIA](/images/x2-global-villa.jpg)
+
+Direct + global illumination
+
+Notes:
+
+学术上认为global包括了direct，但游戏业界global一般仅只indirect
+
+==
+
+GI is more
+
+![](/images/gi_pic.png)
+
+==
+
+GI描述了物体之间的光交互，但游戏领域主要关注的还是BRDF层面的GI。
+
+GI如此吸引游戏开发者的原因是，它很大程度上解放了美术...
+
+毕竟，手工调整是比不上模拟的
+
+==
+
+**近似化**与**简化**是游戏开发最强力的工具
+
+====
+
+### GI's evolution in Game
+
+====
+
+### Precomputation
+
+==
+
+**Surface Caching**
+
+![](/images/surface-caching.png)
+
+起源——Quake
+
+模型的每个顶点存一个8-bit预先烘培好的光照值
+
+Notes:
+
+可以看做是最早期的Lightmap，最初只有单色亮度，后来加入了RGB亮度
+
+这种Lightmap一般用辐射度方法预先计算，使用的时候与材质的albedo color相乘
+
+AO可以bake进材质的diffuse color里面，但由于diffuse贴图一般是共享的，只能分开存放
+
+每个物体的表面都需要编码进Lightmap UV里面，一般是自动完成加手动调整（防止重叠）
+
+Lightmap很少做Mipmap，一个原因是本来就小，另一个原因是不能重叠要求有较大间隙
+
+展开UV时要注意几何上连续的部分在UV上也要连续，不然会导致缝隙的artifact
+
+==
+
+**Radiosity Normal Mapping**
+
+![](/images/radiosity-normal-mapping.png)
+
+储存三个基方向的亮度值，以法线插值
+
+能近似出Rough Specular的效果
+
+缺点：插值的结果并不是物理正确的
+
+Notes:
+
+Lightmap最初只记录一个方向（法线）的光照信息，这让使用了法线贴图的模型难以使用
+
+Valve在半条命2中提出了RNM，后来被很多游戏使用（便宜！只使用9个浮点数）
+
+Far Cry里用里一个变种方法，只存了切线空间的主光照方向(2)，主光照颜色(3)，和一个系数表示directional的比例(1)，共6个浮点数
+
+==
+
+**Spherical Harmonics Lightmaps**
+
+![](/images/spherical-harmonics-lightmaps.png)
+
+Lightmap的纹素变为了SH形式储存的有方向性的光照信息
+
+SH为球面上的一个连续函数（半球面的基要改为H-basis）
+
+适合频率低的Diffuse，但Specular就不行了
+
+Notes:
+
+SH形式的Lightmap里面存的是Radiance，原Lightmap存的是Irradiance。
+
+SH一般由离线光子映射计算出
+
+三阶SH一共9个SH系数，可以实现很好的效果；开销略大（27个浮点数）
+
+这是因为SH随着阶数变高，需要的系数个数会变得很多，多到内存里存不下
+
+动态物体也可以通过Light Probe的方法访问到SH的信息，进而实现GI效果
+
+==
+
+**Spherical Gaussians Lightmaps**
+
+![](/images/spherical-gaussians-lightmaps.png)
+
+用不同的基函数替换SH，获得更多细节的Radiance
+
+适合Diffuse和Specular，数据表示直观紧凑，可以随意*叠加*
+
+比如Last of Us里面就采取了Ambient+Dominant direction
+
+Notes:
+
+一个SG系数就可以储存一个lobe的光照
+
+The Order:1886里面用5~9个SG系数实现了高质量的Specular GI
+
+==
+
+**Precomputed Radiance Transport**
+
+![](/images/precomputed-form-factors.png)
+
+预计算光源对某位置的贡献，以一个Transport函数表示
+
+可以支持多动态光源的GI计算，如Time of day
+
+缺点：场景变化就要重新计算可见性
+
+Notes:
+
+由于光的线性叠加性，不同光源的贡献可以分离计算再叠加
+
+实际上不一定是光源，可以是任意发光表面，因为受光平面不需要知道原光源的信息
+
+Transport函数可以接受不同形式的输入与输出
+
+比如3阶SH到3阶SH，其开销较大，此时Transport函数相当于9x9矩阵
+
+Far Cry3-4中就用了2阶SH作为输入，自定义的4方向basis作为输出
+
+Assassin's Creed 4中用一个basis表示阳光，但是提前计算出一天中不同时间的Transport
+
+Enlighten的实时GI用到了该方法
+
+==
+
+**Light Probes**
+
+![](/images/probe-gi.png)
+
+将光照信息（一般是SH）储存在空间中（一般用3D texture储存，**irradiance volumes**）
+
+动态物体获取临近几个光照信息，插值得到任意位置的光照
+
+Notes:
+
+光照信息可以来着静态的SH、SG、Ambient dice，或是动态的PRT
+
+Unity中的Light Probe储存的是点云（手动放置），并在四面体内插值
+
+适合动态物体，但也可用于静态物体
+
+好处是动态物体与静态物体使用同一套光照信息，适合Deferred Shading
+
+坏处是内存开销大，indirect specular的质量减弱（改用IBL或SSR）
+
+====
+
+### Volume based Methods
+
+==
+
+**Reflective Shadow Map**
+
+![](/images/rsm_maps.png)
+
+从光源角度渲染，记录光源可见表面的属性：
+
+1. 表面颜色
+2. 法线
+3. 光通量（Flux）
+
+Notes:
+
+类似Shadow Map
+
+Flux是光源到达表面的光通量，比如点光源的光通量就与距离平方成反比；Spot light可以额外考虑falloff
+
+==
+
+![](/images/indirect_lighting1.png)
+
+Shading时采样临近RSM纹素作为虚拟点光源
+
+Notes:
+
+Shadow Map一般较大，做indirect illumnation时一般只考虑临近的纹素，采用重要性采样
+
+==
+
+**Virtual Point Lights（Instant Radiosity）**
+
+![The Last of Us](/images/vpl-brief.png)
+
+一般用于狭隘室内的手电筒效果，调整的好可以看起来很真实
+
+缺点是没有遮挡关系；不稳定，只能用于局部效果
+
+Notes:
+
+样本数量对性能影响较大
+
+Uncharted 4里面每个像素只采样16个样本，但不同的帧轮流使用不同的样本集，最后在时间上过滤
+
+==
+
+**Heightfield GI**
+
+![](/images/heightfield-gi.png)
+
+渲染一个top-down的RSM，获得高度场的光照信息
+
+适合高度场的室外开阔场景的环境光，不能用在室内
+
+MotoGP、UE4 Kite Demo里使用过
+
+==
+
+**Light Propagation Volumes**
+
+![](/images/lpv-brief.png)
+
+将场景划分为3维网格，每个cell里面储存radiance的分布
+
+优点：无需预处理，开销低，支持体积效果
+
+<!-- .element: style="font-size:80%;" -->
+
+缺点：网格未对齐会导致漏光，网格分辨率高时光线传播慢
+
+<!-- .element: style="font-size:80%;" -->
+
+Notes:
+
+Radiance分布在最初的论文中以2阶SH储存
+
+LPV的开销较低，主机硬件都能运行
+
+总体来说适合Diffuse GI
+
+==
+
+![](/images/lpv-progress.png)
+
+LPV分成3个步骤：
+
+1. 渲染RSM
+2. 含有VPL的cell计算最初的SH
+3. 光照在网格内传播
+
+Notes:
+
+最初只有与被光照射的表面直接接触的cell有光照信息
+
+接下来，每个cell根据邻居cell的光照，计算出自己光照的更新
+
+最后得到一个radiance field，这个radiance field包含了低频的光照信息，甚至可以做一些glossy BRDF
+
+由于每次迭代光照只能传播一格，速度较慢；而低分辨率网格又容易导致漏光；后来提出了Cascaded LPV
+
+最初传播没有考虑遮挡，后来使用了RSM与摄像机的深度信息，作为部分遮挡信息；完整的遮挡可以voxelize场景
+
+==
+
+**Sparse Voxel Octree GI**
+
+![](/images/vct-brief.png)
+
+场景储存为稀疏体素八叉树，且层次化（类似Mipmap）
+
+优点：支持Diffuse和Specular，和较大尺度的AO
+
+<!-- .element: style="font-size:80%;" -->
+
+缺点：有部分漏光，高Specular有artifact
+
+<!-- .element: style="font-size:80%;" -->
+
+Notes:
+
+当下最好的实时GI实现
+
+后来有用更GPU friendly的Clipmap替代octree的实现，Clipmap类似Mipmap，只是低层信息只储存中心部分
+
+其实，拿到场景Voxel数据后可以做很多，如AO，Soft Shadow
+
+AO相比SSAO的好处是可以考虑到离屏遮挡，只是分辨率不高，只适合较大尺度
+
+漏光是体积类方法的通病了；偏镜面的反射会展现出底层是voxel的本质，可以falloff到SSR之类的其他方法
+
+==
+
+![](/images/svogi.png)
+
+SVOGI也可以分为3步：
+
+1. 将RSM的直接光照信息注入到底层八叉树中
+2. 底层八叉树的光照向上层传播
+3. Cone Tracing收集indirect radiance
+
+Notes:
+
+第一步（Light pass）与LPV第一步类似
+
+第二步（Filtering pass）：down-sampling
+
+第三步（Camera pass）
+
+==
+
+**Voxel Cone Tracing**
+
+![](/images/voxel-cone-tracing.png)
+
+根据Cone当前部分大小，找到八叉树的合适层级做相交检测
+
+<!-- .element: style="font-size:75%;" -->
+
+Tracing Cone的方向与数量根据BRDF决定
+
+<!-- .element: style="font-size:75%;" -->
+
+Notes:
+
+理想情况是发射很多ray做相交检测，但限于速度只能向平均方向做cone tracing
+
+Cone的精确相交计算量也大，只能将cone分割成由小到大的球体（或立方体），每个球体（立方体）与八叉树做快速相交检测
+
+距离cone的发射点越远，立方体的尺寸越大，采样偏顶层（较粗略）的体素八叉树
+
+用类似三线性插值的方法获得选中的两层的一个中间值
+
+Diffuse BRDF一般要Tracing多个Cone，以覆盖整个半球面；VCT尤其适合glossy reflection
+
+====
+
+### Local Approximation
+
+==
+
+**Ambient Occlusion**
+
+![](/images/ao-baking-gpu.png)
+
+AO作为GI的局部近似
+
+根据光照信息频率的不同，有不同的方案
+
+典型的如baked lightmap AO，SSAO，volumn，高度场、距离场AO等
+
+Notes:
+
+图片是Destiny采用的baked AO
+
+近年来实时计算的AO被大量使用，如基于距离场的cone tracing，screen-spaced AO
+
+起初Crytek提出的SSAO只是简单的在每个像素的一圈内采样点，根据多少像素深度小于采样点深度判断遮挡程度；HBAO对其做了较大改进，找出水平方向的未遮罩角度
+
+==
+
+**Screen Space GI**
+
+![](/images/ssgi.png)
+
+局部GI的另一种方案
+
+目前比较成熟的是**Horizon-Based Indirect Lighting**
+
+Notes:
+
+可以当做近距离局部GI的补充，与另一种全局GI结合使用
+
+受到HBAO的启发，挖掘屏幕空间的位置信息
+
+每渲染一个pass就相当于一次bounce，多帧后就可以达到近乎无限次数的bounce效果
+
+Screen-space方法的缺点是作为光源的pixel被挡住或离开屏幕后，受间接光的部分会马上黑掉
+
+有一些trick解决这个问题，如将被直接光照的部分同时渲染到另一个Render Target上，并且以更大的FOV渲染，first bounce从这个RT上采样，这样就减轻了视角切换带来的问题
+
+==
+
+**Specular GI?**
+
+![](/images/stochastic-ssr.png)
+
+Specular GI有一些独特的解决方案，如基于IBL的Parallax-Corrected Cubemaps，Screen-Space Reflections，Spherical Harmonics/Guassian近似
+
+Notes:
+
+SSR尤其适合FPS类游戏，但在其他视角（top-down view）就没什么效果
+
+一些传统的方法，如平面反射也可以考虑进来
+
+当前的RTX也是一直Specular GI的解决方案
+
+大部分游戏不考虑specular到specular的GI
+
+====
+
+### Challenge
+
+==
+
+#### 视觉一致性失败
+
++ 模型过于简化
++ PBR参数过于简化
++ 低分辨率素材
++ 错误处理了特殊光源（cookie）
++ 手动参数调节过度
++ 出现负值光
+
+Notes:
+
+•Simplified albedo color
+
+•Not handling metallic surfaces
+
+•Not handling roughness properly
+
+•Not storing enough post-computation info to reconstruct view-dependent results
+
+•Vertex/surface/detail normal to texel/voxel/probe ratio
+
+==
+
+#### 开发流程失败
+
++ 开发时的光照一直是“错”的
++ 使迭代变得复杂
++ “全局”意味着移动一个物体，整个场景重新烘培
++ “预览”模式也很慢，灯光还不准确
++ 导致关卡设计变得“静止”
+
+Notes:
+
+•i.e.: Build made two revisions before lighting was “generated”, hard to judge art!
+
+•i.e.: Lighting done late in the level authoring process, after sign-off
+
+
+
+Example Scenario: Nightly build of GI for open world map (8+ hours)
+
+1.Artist submits everything in time for automated process to start
+
+2.Process runs all night
+
+3.Artist arrives at work in the morning, syncs and opens editor, notices something is visually broken  
+
+4.Fixes it, submits, waits (next day, or several hours)
+
+5.Rinse-and-repeat
+
+==
+
+#### 编辑流程失败
+
++ 美术倾向“手工调整”GI失败的地方
++ 修复“漏光”
++ 用“负光”去除过度的GI
++ 用简单几何体加速烘培
++ 耗时耗力而且不稳定
+
+Notes:
+
+Unity progressive lightmapper 就是加速编辑流程的工具
+
+希望杜绝无意义的“GI调整”：Unwrapping lightmap UVs、Building simplified geometry for GI、Manually placing GI & reflection volumes
+
+==
+
+#### 帧数，帧数
+
++ 60Hz -> 16.6ms
++ 144Hz -> 6.94ms
++ 留足余量，实际可用比这还少（掉帧就不好玩了）
++ 主机的GPU算力...（单位：TFLOPS）
+  + PS4: 1.8, PS4Pro: 4.2, XB1: 1.3, XB1X: 6
+  + TitanX: 11, Vega: 13.1
+
+==
+
+#### 烘培过于耗电
+
++ Beefy Machines / Server Setups
+  + Halo 3: 256 servers, 456 Processors, 1GB memory [Chen08][Villegas08]
+  + CoD: 48 GB RAM and 12 GB VRAM machines
+  + Destiny: Farm with tens of servers to bake AO
+  + SNDBS/Incredibuild: pool of GPUs running all night (650W+ PSUs)
+
+==
+
+#### 游戏特性使GI失效
+
++ 磨损、破坏、变形效果
++ 昼夜变换
++ 天气
++ 玩家生成物体
++ 动态物体、动态光源、体积光
+
+Notes:
+
+A hole in the wall can drastically break GI
+
+Interpolation doesn’t always give best results  
+
+==
+
+#### 开放世界
+
+![](/images/open-world-scale.png)
+
+==
+
+| ![](/images/acu-gi-huge.png) | ![](/images/acu-gi-result.png) |
+| ---------------------------- | ------------------------------ |
+| ACU 高达21GB的GI文件         | 效果的确很好                   |
+
+==
+
+![](/images/open-world-gi.png)
+
++ 昼夜变换、天气
++ 室内、室外切换
++ 需要Robust的制作流程
+
+Notes:
+
+开放世界的GI很不简单
+
+体量大、串流压力
+
+====
+
+GI for Games of The Future
+
+![](/images/future-game-gi.jpg)
+
+==
+
++ GI可以渲染氛围，就像背景音乐
++ 自然场景的GI，很难（森林，植被...）
++ 体积效果（雾、烟、汽...）的GI
++ 全粗糙度覆盖、全BSDF覆盖的GI
++ 支持任意的光（面积光将成为主流）
++ AI降噪、重建，Deep Learning GI?
++ 简单、直观、美术友好的用户界面
++ ...
+
+Notes:
+
+比如FPS中一个着火的场景，火光、烟雾的GI能极大提升沉浸感
+
+体积效果GI不解决，爆炸就难以真实
+
+窗户、广告牌...都是面积光（然而面积光的实时阴影现在都搞不定...）
+
+以上这些问题需要学术界与游戏界共同解决...
+
+最近随着硬件水平的提升，越来越多的厂商将Ray tracing体系内的思想和算法带进了实时渲染领域；未来一段时间可以看到越来越多的RT与光栅化算法在各种层面结合的例子
+
+====
+
+#### Comparison
+
+| **实时方法** | 静态物体（Diffuse）            | 动态物体（Diffuse）       | 静态物体（Specular）        | 动态物体（Specular）           |
+| ------------ | ------------------------------ | ------------------------- | --------------------------- | ------------------------------ |
+| 静态光照     | Radiosity Normal Mapping       | Light Probes              | Spherical Gaussian Lightmap | Environment Map                |
+|              | Spherical Harmonic Lightmap    | Ambient Occulsion         | Directional Occulsion       |                                |
+| 动态光照     | Precomputed Radiance Transport | Virtual Point Lights      |                             | SVOGI/Voxel Cone Tracing GI    |
+|              |                                | Light Propogation Volumes |                             | Planar/Screen-space Reflection |
+|              |                                | Screen-space GI（HBIL）   |                             |                                |
+
+<!-- .element: style="font-size:50%;" -->
+
+====
+
+### The End
+
+Reference:
+
++  https://www.ea.com/seed/news/seed-siggraph2017-global-illumination
++  https://ericpolman.com/2016/03/17/reflective-shadow-maps/ 
++  https://research.nvidia.com/sites/default/files/pubs/2011-09_Interactive-Indirect-Illumination/GIVoxels-pg2011-authors.pdf
++  https://github.com/Patapom/GodComplex/blob/master/Tests/TestHBIL/2018%20Mayaux%20-%20Horizon-Based%20Indirect%20Lighting%20(HBIL).pdf
++  《Realtime rendering 4th》Chapter 11
+
+<!-- .element: style="font-size:60%;" --></script></section></div></div><script src="https://cdn.jsdelivr.net/npm/reveal.js@3.8.0/js/reveal.min.js"></script><script>Reveal.initialize({
+  mouseWheel: 'false',
+  transition: 'slide',
+  transitionSpeed: 'default',
+  parallaxBackgroundImage: '',
+  parallaxBackgroundSize: '',
+  parallaxBackgroundHorizontal: '',
+  parallaxBackgroundVertical: '',
+  slideNumber: 'true',
+  showNotes: false,
+  markdown: {
+    smartypants: true
+  },
+  dependencies: [
+    { src: '/js/third-party/reveal/marked.min.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+    { src: '/js/third-party/reveal/markdown.min.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+    // Syntax highlight for <code> elements
+    { src: '/js/third-party/reveal/highlight.min.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+    // Zoom in and out with Alt+click
+    { src: '/js/third-party/reveal/zoom.min.js', async: true },
+    // Speaker notes
+    { src: '/js/third-party/reveal/notes.min.js', async: true },
+    // MathJax
+    { src: '/js/third-party/reveal/math.min.js', async: true }
+  ]
+});</script></body></html>

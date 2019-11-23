@@ -1,0 +1,16 @@
+{
+"companyName": "WZD Studio",
+"productName": "Chance of Survival:Evacuation",
+"productVersion": "0.1",
+"dataUrl": "COSE Web.data.unityweb",
+"wasmCodeUrl": "COSE Web.wasm.code.unityweb",
+"wasmFrameworkUrl": "COSE Web.wasm.framework.unityweb",
+"graphicsAPI": ["WebGL 2.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20",
+"cacheControl": {"default": "must-revalidate"},
+"developmentBuild": false,
+"multithreading": false,
+"unityVersion": "2019.1.4f1"
+}
