@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="代码阅读笔记"><meta name="keywords" content="C++"><meta name="author" content="dhbloo,1084714805@qq.com"><meta name="copyright" content="dhbloo"><title>代码阅读笔记 | dhb's Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="dns-prefetch" href="https://www.google-analytics.com"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-143073882-2', 'auto');
+ga('send', 'pageview');</script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#glm"><span class="toc-number">1.</span> <span class="toc-text"> GLM</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/icons/avatar.jpg"></div><div class="author-info__name text-center">dhbloo</div><div class="author-info__description text-center">A CS student, currently studying at HUST</div><div class="follow-button"><a href="https://github.com/dhbloo">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">13</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">14</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">5</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="https://gomocalc.github.io/">Gomocalc</a><a class="author-info-links__name text-center" href="https://blog.nirvanasc.com/">ChenYixin</a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">dhb's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">代码阅读笔记</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-01-14</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/C/">C++</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">2,145</span><span class="post-meta__separator">|</span><span>阅读时长: 7 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>记录一些遇到过的大大小小的C<ins>坑，或者是C</ins>比较优秀的惯用技巧、设计模式~</p>
+<p>我将平时阅读的一些项目代码的笔记总结于此。</p>
+<p>俗话说，读代码比写代码要难数倍，尤其是读别人的代码。的确如此，不过，不管从什么角度统计，我们花在读代码上的时间都远多于写代码的时间，而如何将代码写的清晰易懂、便于维护，又是一个不简单的问题。在代码的“品味”上，怎样做出优雅的设计，是一件需要积累的工作，没有十足的经验恐怕是难以达成。虽说经验可以通过自己写代码来增加，但我一直认为，阅读好其他人的代码，品味其中的设计思路，吸收其中的设计优点，才会如虎添翼，迅速增加自己的“代码感”。</p>
+<p>此外，阅读代码本身也是一门学问。如何高效地阅读数量众多，成千上万行起步的代码，并将其中的设计架构提取出来，也不是一件容易的事。</p>
+<a id="more"></a>
+<h3 id="glm"><a class="markdownIt-Anchor" href="#glm"></a> GLM</h3>
+<p>GLM是一个Header-only的3D数学库，实现了C++上的GLSL类型与函数，里面的类型定义大量用到了模版。下面描述一下项目从上（用户接口）到下（底层实现）的结构。</p>
+<ol>
+<li>
+<p>上层的用户可见API均放在了<code>GLM/</code>根目录下，头文件以<code>*.hpp</code>作为扩展名。用户可见的头文件可分为3种：</p>
+<ul>
+<li>一种是综合性导入的头文件，里面仅有其他头文件的导入，这种文件主要是为了方便用户导入相关API。比如GLM将项目分为了4个模块（核心功能、稳定扩展、推荐扩展、实验性扩展），对应的就有两个综合性导入头文件：一个用于导入核心API的<code>glm.hpp</code>，一个用于导入其余的扩展API的<code>ext.hpp</code>，方便用户导入。</li>
+<li>另一些比较具体的类型导入头文件，这种头文件主要是解决同种类型的头文件较多的情况，比如<code>vec3.hpp</code>里面就导入了各种类型的vector3头文件，这些头文件里面主要定义了类型模版的别名，这样使用时就可以不需要填写很长的模版参数了（同时也定义了与GLSL规范相同的类型名称）。</li>
+<li>还有一种是包含了声明的头文件（主要是函数声明），这些函数均为模版函数（由于参数类型本身带模版）。声明的头文件中并没有实现，在声明头文件的底部引入了<code>detail/</code>里面实际的实现。</li>
+</ul>
+<p>以上所有的用户可见API均在命名空间<code>glm</code>下。</p>
+</li>
+<li>
+<p>核心功能的实现在<code>detail/</code>文件夹下。这个文件下的文件扩展名主要就2种：<code>*.hpp</code>为声明，<code>*.inl</code>为具体实现。一个例外是<code>glm.cpp</code>，该文件中显示实例化了各个类的模版，主要是为了能使该库以静态库或动态库的方式使用。以<code>_*.hpp</code>开头的这些文件是库内部使用一次或多次的头文件，主要实现了一些通用的功能或宏相关的检测处理等：</p>
+<ul>
+<li><code>_features.hpp</code>里主要放了有很多编译器功能检测宏，如果发现了编译器支持某些额外特性，就定义一个<code>GLM_CXX??_???</code>的宏，表示可以使用该特性。（不过我没有看到有哪个文件使用了这个文件？）</li>
+<li><code>_fixes.hpp</code>里清除了某些编译环境可能预先定义的宏，防止其产生干扰，如<code>max</code>、<code>min</code>等。</li>
+<li><code>_swizzle.hpp</code>、<code>_swizzle_func.hpp</code>定义了与swizzle相关的类与宏。</li>
+<li><code>_vertorize.hpp</code>实现向量化，就是将同一个函数作用到一个向量上，可以是一元函数或二元函数。</li>
+</ul>
+<p>上面的前两个文件就是为了增加可移植性。</p>
+<p>接下来一个比较重要的文件是<code>setup.hpp</code>，基本上每个文件都会直接或间接地引用到该文件。这个文件中定义了GLM的项目信息宏（版本号、名称字符串），会根据CMake中定义的一些编译选项宏进一步地定义一些宏/类型等，如是否开启编译信息输出、是否开启static_assert、是否使用constexpr、是否使用forceinline等等。此外，该文件内还含有编译器支持的C<ins>特性的检测，如果编译时支持某较新C</ins>的特性，就会定义一个<code>GLM_HAS_???</code>，后序就可以以此使用不同的代码，以增强可移植性。这些根据编译选项定义下来的宏要么在后序作为条件编译用在了<code>#ifdef</code>这样的地方，要么作为关键字展开以实现不同的效果（如<code>GLM_INLINE</code>可以展开为普通的<code>inline</code>或<code>__forceinline</code>或<code>__attribute__((__always_inline__))</code>），也可以根据平台定义统一的类型（如表示长度的<code>length_t</code>是<code>size_t</code>还是<code>int</code>）。</p>
+</li>
+<li>
+<p>之前说了函数的声明在根目录下，而函数的定义在<code>detail/</code>文件夹下，且均以<code>func_*.inl</code>作为文件名。在每个<code>*.inl</code>文件中，可以之前的用户可见函数声明相对应的函数实现。这些实现如果涉及到的只是简单的模版参数，那么在此就直接实现了相关代码；如果涉及到较复杂的实现（例如实现与向量长度有关），那么这段实现中并不会做实际工作，只是首先进行模版参数检测static_assert，然后转发到一个struct的特定静态方法<code>call</code>去。相应的struct定义在命名空间<code>glm::detail</code>中，用户一般不可见。通过对向量长度的偏特化，就可以针对不同长度的向量实现特定的方法，而不支持的长度最终会落到一个空的struct中，导致编译错误。struct中的特定实现可能会用到API本身，这个时候就会从上级根目录中导入其头文件。有一些用到了STL库中已有的函数（比如<code>max</code>），其就在实现中直接通过<code>using std::max</code>进行导入。对于STL函数作用在向量的每个元素上时，用的就是之前说的<code>_vertorize.hpp</code>中的向量化，向量化本身的实现与向量长度有关，也是放在偏特化的struct中。</p>
+</li>
+<li>
+<p>向量/矩阵相关的类声明在<code>detail/type_*.hpp</code>中，类定义在<code>detail/type_*.inl</code>中，类定义也有与函数定义类似的转发机制（主要为了处理SIMD相关），转发的目标均在<code>glm::detail</code>命名空间下，用户不可见。</p>
+</li>
+<li>
+<p>SIMD的转发方式：由于SIMD要求对象是对齐的，如果检测到是对齐的类型，就可以采用SIMD。因此GLM在之前转发到静态方法<code>call</code>时还额外多提供了一个模版参数，表示是否对齐，如果为<code>true</code>就会转发到SIMD的实现。这个是否对齐的判断是用type traits实现的，利用<code>glm::detail::is_aligned</code>完成。在<code>qualifier.hpp</code>中定义了描述精度、对齐的qualifier，根据这些qualifier表示的含义就可以写出对应的判断对齐的type traits。为了实现对齐的要求，这里也定义了一个叫<code>storage</code>的struct，这个struct中会根据align的要求定义不同大小的结构体，之后在具体的类中，将这些结构体与数据成员定义在一个union中即可实现对齐。此外对齐了的<code>storage</code>结构体中可能直接利用SIMD类型进行表示，这样长度就肯定符号SIMD的要求。SIMD的实现函数部分在<code>detail/func_???_simd.inl</code>文件中，类部分就在<code>detail/type_???_simd.inl</code>中，如果检测到支持SIMD且开启的编译选项，SIMD实现文件就会被加入到普通实现文件的底部。这些实现里面可能会用到一些共用的作用于SIMD类型的函数，其定义在<code>simd/*.h</code>中。这里面的函数同时也面向想要使用SIMD编写算法的高级用户。<code>simd/platform.h</code>文件中进行了编译器与平台检测，得知是否开启SSE/AVX/NEON等，再以此导入对应的intrinsic头文件，并对原生的SIMD类型做了typedef，保证不同平台的SIMD类型一致。</p>
+</li>
+</ol>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:1084714805@qq.com">dhbloo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://dhbloo.github.io/2020/01/14/code/Proj-Reading-Notes/">https://dhbloo.github.io/2020/01/14/code/Proj-Reading-Notes/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://dhbloo.github.io">dhb's Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="addthis_inline_share_toolbox pull-right"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5d74ab045bf52ffe" async></script><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/03/12/code/Sphere/"><i class="fa fa-chevron-left">  </i><span>基本模型——球的N种画法</span></a></div><div class="next-post pull-right"><a href="/2020/01/14/code/Cpp-Notes/"><span>C++踩坑记录与知识点笔记</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="disqus_thread"></div><script>var unused = null;
+var disqus_config = function () {
+  this.page.url = 'https://dhbloo.github.io/2020/01/14/code/Proj-Reading-Notes/';
+  this.page.identifier = '2020/01/14/code/Proj-Reading-Notes/';
+  this.page.title = '代码阅读笔记';
+}
+var d = document, s = d.createElement('script');
+s.src = "https://" + 'myblog-mdqheoz6z0' +".disqus.com/embed.js";
+s.setAttribute('data-timestamp', '' + +new Date());
+(d.head || d.body).appendChild(s);</script></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By dhbloo</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">Welcome to my blog :)</div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

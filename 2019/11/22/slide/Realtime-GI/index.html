@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-Hans"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Realtime GI Introduction"><meta name="keywords" content="实时渲染,GI"><meta name="author" content="dhbloo,1084714805@qq.com"><meta name="copyright" content="dhbloo"><title>Realtime GI Introduction | dhb's Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.8.0/css/reveal.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.8.0/css/theme/black.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.8.0/lib/css/zenburn.min.css"></head><body><div class="reveal"><div class="slides"><section data-markdown data-separator="====" data-separator-vertical="==" data-charset="utf-8"><script type="text/template">
+<!DOCTYPE html><html lang="zh-Hans"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Realtime GI Introduction"><meta name="keywords" content="实时渲染,GI"><meta name="author" content="dhbloo,1084714805@qq.com"><meta name="copyright" content="dhbloo"><title>Realtime GI Introduction | dhb's Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.6.0/css/reveal.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.6.0/css/theme/black.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.6.0/lib/css/zenburn.min.css"></head><body><div class="reveal"><div class="slides"><section data-markdown data-separator="====" data-separator-vertical="==" data-charset="utf-8"><script type="text/template">
 # Realtime GI In Games
 
 Notes:
@@ -635,16 +635,14 @@ Reference:
 +  https://github.com/Patapom/GodComplex/blob/master/Tests/TestHBIL/2018%20Mayaux%20-%20Horizon-Based%20Indirect%20Lighting%20(HBIL).pdf
 +  《Realtime rendering 4th》Chapter 11
 
-<!-- .element: style="font-size:60%;" --></script></section></div></div><script src="https://cdn.jsdelivr.net/npm/reveal.js@3.8.0/js/reveal.min.js"></script><script>Reveal.initialize({
-  mouseWheel: 'false',
+<!-- .element: style="font-size:60%;" --></script></section></div></div><script src="https://cdn.jsdelivr.net/npm/reveal.js@3.6.0/lib/js/head.min.js"></script><script src="https://cdn.jsdelivr.net/npm/reveal.js@3.6.0/js/reveal.min.js"></script><script>Reveal.initialize({
+  mouseWheel: false,
   transition: 'slide',
   transitionSpeed: 'default',
   parallaxBackgroundImage: '',
   parallaxBackgroundSize: '',
   parallaxBackgroundHorizontal: '',
   parallaxBackgroundVertical: '',
-  slideNumber: 'true',
-  showNotes: 'true',
   markdown: {
     smartypants: true
   },
@@ -652,7 +650,12 @@ Reference:
     { src: '/js/third-party/reveal/marked.min.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
     { src: '/js/third-party/reveal/markdown.min.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
     // Syntax highlight for <code> elements
-    { src: '/js/third-party/reveal/highlight.min.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+    { src: '/js/third-party/reveal/highlight.min.js', async: true, callback: function() {
+      // issue #218
+      setTimeout(function () {
+        hljs.initHighlighting();
+      }, 0)
+    } },
     // Zoom in and out with Alt+click
     { src: '/js/third-party/reveal/zoom.min.js', async: true },
     // Speaker notes
