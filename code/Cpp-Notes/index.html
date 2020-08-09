@@ -1,0 +1,195 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="C++知识点笔记与踩坑记录"><meta name="keywords" content="C++"><meta name="author" content="dhbloo,duanhb1084@qq.com"><meta name="copyright" content="dhbloo"><title>C++知识点笔记与踩坑记录 | dhb's Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.8.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.8.2"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.8.2"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="dns-prefetch" href="https://www.google-analytics.com"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-143073882-2', 'auto');
+ga('send', 'pageview');</script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '5.0.0'
+} </script><meta name="generator" content="Hexo 5.0.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text"> 前言</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-number"></span> <span class="toc-text"> 语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E7%89%88"><span class="toc-number"></span> <span class="toc-text"> 模版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#stl"><span class="toc-number"></span> <span class="toc-text"> STL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8"><span class="toc-number">1.</span> <span class="toc-text"> 容器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E4%BC%98%E5%8C%96"><span class="toc-number"></span> <span class="toc-text"> 底层实现|优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#polymorphism-rtti"><span class="toc-number">1.</span> <span class="toc-text"> Polymorphism &amp; RTTI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text"> 性能优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%AF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="toc-number"></span> <span class="toc-text"> 惯用技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E7%89%88-2"><span class="toc-number">1.</span> <span class="toc-text"> 模版</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/icons/avatar.jpg"></div><div class="author-info__name text-center">dhbloo</div><div class="author-info__description text-center">A CS student, currently studying at HUST</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://github.com/dhbloo">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">13</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">14</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">5</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://gomocalc.github.io/">Gomocalc</a><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://blog.nirvanasc.com/">ChenYixin</a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">dhb's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">C++知识点笔记与踩坑记录</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-01-14</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/C/">C++</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">4k</span><span class="post-meta__separator">|</span><span>阅读时长: 13 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>记录一些遇到过的大大小小的C<ins>坑，或者是C</ins>比较优秀的惯用技巧、设计模式。这些知识点十分分散却很有用，但他们单独拿出来难以构成一篇完整的文章，这里我以杂记的方式将它们记录下来，以便后续翻阅。</p>
+<a id="more"></a>
+<h3 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h3>
+<p>C++很久以来被称作是“博大精深”的一门语言，不仅是因为其语言特性较为复杂且多到令人叹为观止的地步；也是因为细节很多，稍不留神就有可能踏入隐藏的深坑。</p>
+<p>说到语言特性复杂，C<ins>确实有很多不同方面的语言特性，在cppreference上一眼望去都会眼花缭乱。众所周知，C</ins>被称作一门“多范式”的语言，相比于其他一些“纯粹”的编程语言，它不纯粹，因为它的设计者们认为没有一种设计思想适用于所有的情况：C<ins>不仅支持从C直接继承而来的命令式编程，也支持层次性的面向对象编程、泛型编程、函数式编程、编译期编程等编程范式。这种“不纯粹”的设计观念被一些人反感，但也正是这种多样性，使得C</ins>得以很好的应用在各个行业领域。</p>
+<p>除此之外，C++还有许多很好的设计理念与思想：</p>
+<ul>
+<li>“Zero-overhead Principle”：对于不使用的部分，不需要为其付出代价；对于使用到的抽象，自己手写的代码不会更好。</li>
+<li>既能向上增加抽象层次，丰富语义减轻思维负担；也能向下足够接近硬件，充分利用硬件资源。</li>
+<li>用户可扩充的静态类型系统：最大发挥编译器的作用，在编译期解决绝大多数的错误。</li>
+<li>对值类型与引用类型的同等支持。</li>
+<li>系统性的资源管理思想与机制：RAII。</li>
+<li>库与语言一样重要：对于用户来说，语言设计与库设计没有区别，是紧密结合的。</li>
+<li>…</li>
+</ul>
+<p>C<ins>已经历经的多个版本，并在C</ins>11之后以3年为周期持续演进新的版本；每次演进都旨在解决之前出现的痛点，或是引入新的特性或组件。当然，这样也使得C<ins>的学习成本在不断增加（如果真的要了解所有细节的话）。不过C</ins>的设计初衷并不是让我们用上所有的语言特性，而是选择最适合自己项目的语言特性，毕竟没有什么单一的思想是万能。</p>
+<p>对我而言，C<ins>最大想吸引力就是“能上能下”，足够的抽象能力让简单的事情与复杂的事情都能较好地表达；而需要极致性能的时候又可以深入到机器底层开展细致的优化。当然坑的问题仍然存在，它不想其他一些对程序编写有严格要求的语言（如Rust），旨在给以最大的自由，这时就需要我们自己保持良好的程序风格与规范。不过好在既有C</ins>11以来的“现代C++”给我们带来越来越多的安全的抽象能力，也有如<a target="_blank" rel="noopener" href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines">CppCoreGuideline</a>这样的从经验中总结的编程规范，让我们离这个目标越来越近。</p>
+<h2 id="语法"><a class="markdownIt-Anchor" href="#语法"></a> 语法</h2>
+<ol>
+<li>
+<p>对于<code>std::make_shared()</code>，要求相应对象的构造函数必须为public的。然而，即使调用<code>std::make_shared()</code>的一方有对于非public构造函数的访问权限（类内部的static public的<code>create()</code>构造方法、友元类里的构造），<code>std::make_shared()</code>此时还是不能work，因为其访问权限永远被认为是外部的。</p>
+<p><strong>解决</strong>：a. 简单来说，可以改用<code>std::shared_ptr&lt;A&gt;(new A)</code>这样的分离形式。但这样会造成其内存空间不连续。</p>
+<p>​			b. 从原本的类派送一个类，这样获得了其public的构造函数的访问权。</p>
+<p>​			c. 增加新构造函数，区分有访问权的构造。</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/8147027/how-do-i-call-stdmake-shared-on-a-class-with-only-protected-or-private-const/8147213#8147213">参考1</a> <a target="_blank" rel="noopener" href="https://github.com/isocpp/CppCoreGuidelines/issues/1205">参考2</a> <a target="_blank" rel="noopener" href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#discussion-use-a-factory-function-if-you-need-virtual-behavior-during-initialization">参考3</a></p>
+</li>
+<li>
+<p><strong>默认实参</strong>的问题：</p>
+<ol>
+<li>多个声明时，（同一作用域下）后面的声明可以获得前面声明的实参；也就是说可以在后面添加默认实参。</li>
+<li>虚函数调用的默认实参，根据调用时的静态类型来定。</li>
+<li>运算符重载不能有默认实参。</li>
+</ol>
+</li>
+<li>
+<p>关于取成员函数指针时的重载问题：用<code>static_cast</code>进行强制类型装换后再取地址即可。注意在函数指针作为模版参数时，重载函数会导致模版参数推导失败，这个时候可以手动指定模版参数。</p>
+</li>
+<li>
+<p><strong>Inline namespace</strong>可用于管理library versioning，将库的不同版本放置于一个特定的namespace中，再对目前使用的namespace前加上inline即可。其好处是在ABI的符号中保留了inline namespace的名称。</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/11016220/what-are-inline-namespaces-for">参考</a></p>
+</li>
+<li>
+<p><strong>Anonymous namespace</strong>用于定于翻译单元范围内的符号，其作用与<code>static</code>类似，不过相比<code>static</code>来说可以作用在类型定义上。Anonymous namespace只用于<code>.cpp</code>文件而不用于头文件，因为在头文件中的匿名空间里定义的符号可能会被多个翻译单元编译，导致在链接时发生意想不到的结果（违背了ODR原则）。对于头文件中的“私有”符号，需要采用私有的名字空间（如目前流行的<code>detail</code>）。</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/154469/unnamed-anonymous-namespaces-vs-static-functions">参考1</a> <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4726570/deprecation-of-the-static-keyword-no-more">参考2</a> <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4422507/superiority-of-unnamed-namespace-over-static">参考3</a> <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/357564/uses-for-anonymous-namespaces-in-header-files">参考4</a> <a target="_blank" rel="noopener" href="https://wiki.sei.cmu.edu/confluence/display/cplusplus/DCL59-CPP.+Do+not+define+an+unnamed+namespace+in+a+header+file">参考5</a></p>
+</li>
+<li>
+<p>当重载函数/模版函数作为参数传递给一个模版函数时，该模版函数的deduction会失败。这是因为C++目前不允许传递<strong>重载集（Overload Sets）</strong>。比如以下代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">auto</span> v1 = <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&#123;<span class="number">3</span>,<span class="number">15</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">1</span>&#125;;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">auto</span> v2 = <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&#123;<span class="number">5</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">7</span>,<span class="number">3</span>&#125;;</span><br><span class="line">	<span class="keyword">auto</span> v3 = <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&#123;&#125;;</span><br><span class="line">	<span class="built_in">std</span>::transform(v1.<span class="built_in">begin</span>(), v1.<span class="built_in">end</span>(), v2.<span class="built_in">begin</span>(), <span class="built_in">std</span>::back_inserter(v3), <span class="built_in">std</span>::<span class="built_in">max</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于<code>std::max</code>为重载模版函数，其作为参数传递给<code>std::transform</code>时决议失败。然而此时是可以推导出<code>std::max</code>应有的重载版本的，解决方案是用lambda将<code>std::max</code>包起来，如</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::transform(v1.<span class="built_in">begin</span>(), v1.<span class="built_in">end</span>(), v2.<span class="built_in">begin</span>(), <span class="built_in">std</span>::back_inserter(v3),</span><br><span class="line">               [](<span class="keyword">auto</span> l, <span class="keyword">auto</span> r)&#123;<span class="keyword">return</span> <span class="built_in">std</span>::<span class="built_in">max</span>(l, r);&#125;);</span><br></pre></td></tr></table></figure>
+<p>不过这里的参数类型可能发送变化，为了得到与之前完全一样的类型，需要用到完美转发，再让lambda自动推导返回类型。假设函数为<code>fun</code>，传入的函数应该写成：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[](<span class="keyword">auto</span>&amp;&amp;...args)-&gt;<span class="keyword">decltype</span>(<span class="keyword">auto</span>)&#123;<span class="keyword">return</span> fun(<span class="built_in">std</span>::forward&lt;<span class="keyword">decltype</span>(args)&gt;(args)...);&#125;</span><br></pre></td></tr></table></figure>
+<p>用一个宏简化一下，这里的函数用<code>__VA_ARGS__</code>表示，以支持更复杂的情况，如静态成员函数模版等；并加上了异常的声明：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LIFT(...) \</span></span><br><span class="line">    [](<span class="keyword">auto</span> &amp;&amp;... args) <span class="keyword">noexcept</span>(<span class="keyword">noexcept</span>( \</span><br><span class="line">			__VA_ARGS__(<span class="built_in">std</span>::forward&lt;<span class="keyword">decltype</span>(args)&gt;(args)...))) -&gt; <span class="keyword">decltype</span>(<span class="keyword">auto</span>) \</span><br><span class="line">	&#123; <span class="keyword">return</span> __VA_ARGS__(<span class="built_in">std</span>::forward&lt;<span class="keyword">decltype</span>(args)&gt;(args)...); &#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://akrzemi1.wordpress.com/2018/07/07/functions-in-std/">参考2</a>指出该宏在多个地方均有出现，意味着语言特性的缺失；此外也有一些关于解决此问题的提案。</p>
+<p><a target="_blank" rel="noopener" href="https://florianjw.de/en/passing_overloaded_functions.html">参考1</a> <a target="_blank" rel="noopener" href="https://akrzemi1.wordpress.com/2018/07/07/functions-in-std/">参考2</a> <a target="_blank" rel="noopener" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0834r0.html">参考3</a> <a target="_blank" rel="noopener" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1170r0.html">参考4</a> <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/30855193/passing-template-function-as-argument-for-normal-function">参考5</a></p>
+</li>
+<li>
+<p><code>noexcept()</code>有在不同地方两种含义：</p>
+<ul>
+<li>在函数声明时的<code>noexcept(x)</code>表示如果<code>x</code>为<code>true</code>，则该函数为no-throw。
+<ul>
+<li><code>noexcept(x)</code>也可以作为操作符，返回表达式<code>x</code>是否会抛出异常。</li>
+</ul>
+</li>
+</ul>
+<p>所以<code>void foo() noexcept(noexcept(y));</code>表示函数<code>foo()</code>是否抛出异常与<code>y</code>相同。</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/48703988/c-iso-noexcept-of-noexcept">参考</a></p>
+</li>
+<li>
+<p>在作为参数传递Functor时，为了保证其传递的值类型不变，需要使用<code>std::forward</code>；此外，在最后调用Functor时，也需要先用<code>std::forward</code>得到原本的值类型，否则会导致Functor的值类型变化，调用到不正确的重载函数版本（如<code>const &amp;&amp;</code>被调用为<code>const &amp;</code>的版本）。</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/31253334/when-should-i-stdforward-a-function-call">参考</a></p>
+</li>
+<li>
+<p>C++ 11之后支持了<strong>构造函数委托（Delegating constructor）</strong>：支持一个构造函数调用另一个构造函数，可以节省很多冗余构造的代码。这种委托可以形成一个链式调用，如“A-&gt;B-&gt;C”；当然，循环调用的结果是未定义的。</p>
+<p><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/constructor">参考1</a> <a target="_blank" rel="noopener" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1986.pdf">参考2</a></p>
+</li>
+<li>
+<p>…</p>
+</li>
+</ol>
+<h2 id="模版"><a class="markdownIt-Anchor" href="#模版"></a> 模版</h2>
+<ol>
+<li>
+<p>Fold expression: 目前只支持32种C++内置的二元运算符，共4种展开形式（左折叠or右折叠 x 不带初值or带初值）</p>
+<p>其中比较特殊的<code>,</code>二元运算用法较独特：可以用作依次的无返回值函数调用，如</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">push_back_vec</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;T&gt;&amp; v, Args&amp;&amp;... args)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static_assert</span>((<span class="built_in">std</span>::is_constructible_v&lt;T, Args&amp;&amp;&gt; &amp;&amp; ...));</span><br><span class="line">    (v.push_back(<span class="built_in">std</span>::forward&lt;Args&gt;(args)), ...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可见有返回值的函数可以将返回值Reduce收集，而无返回值的可以采用<code>,</code>运算符展开。</p>
+<p><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/fold">参考1</a> <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/27582862/fold-expressions-with-arbitrary-callable">参考2</a> <a target="_blank" rel="noopener" href="http://picanumber.github.io/reduce/">参考3</a></p>
+</li>
+<li>
+<p>…</p>
+</li>
+</ol>
+<h2 id="stl"><a class="markdownIt-Anchor" href="#stl"></a> STL</h2>
+<h3 id="容器"><a class="markdownIt-Anchor" href="#容器"></a> 容器</h3>
+<ol>
+<li>
+<p><code>emplace_back(Args&amp;&amp;... args)</code>通过<code>std::allocator_traits&lt;A&gt;::construct(allocator, p, args)</code>构造元素，<code>args</code>是传递给元素<code>T</code>构造函数的参数。<code>::construct()</code>函数内调用<code>::new ((void*)_Ptr) T(std::forward&lt;Args&gt;(args)...)</code>进行构造，因此这里没有使用<strong>统一初始化（Uniform Initialization）</strong>。</p>
+<p>如果有一个POD <code>struct X&#123;int a; int b;&#125;;</code>没有定义任何构造函数，对其容器<code>std::vector&lt;X&gt;</code>进行<code>emplace_back(1, 2)</code>就会编译错误，因为找不到对应的构造函数。尽管聚合体<code>struct X</code>能被initializer_list初始化，此时也不能用<code>emplace_back(&#123;1, 2&#125;)</code>，因为**大括号initializer list（brace-enclosed initializer list）**不能被<code>std::forward</code>传递。</p>
+<p><strong>解决</strong>：这时要么给<code>struct X</code>定义构造函数，要么改用显式初始化的<code>emplace_back(X&#123;1, 2&#125;)</code>/<code>emplace_back&lt;X&gt;(&#123;1, 2&#125;)</code>，或隐式初始化的<code>push_back(&#123;1, 2&#125;)</code>。</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/13962063/emplacing-a-pod">来源</a></p>
+</li>
+<li>
+<p>…</p>
+</li>
+</ol>
+<h2 id="底层实现优化"><a class="markdownIt-Anchor" href="#底层实现优化"></a> 底层实现|优化</h2>
+<h3 id="polymorphism-rtti"><a class="markdownIt-Anchor" href="#polymorphism-rtti"></a> Polymorphism &amp; RTTI</h3>
+<ol>
+<li>多态对象（有虚函数或继承了虚类）的首元素为一个虚表指针，之后是自己的成员变量。对于多继承的多态对象来说，布局为多个对象（首先为派生类，后面依次为各个基类）的叠加，比如对于继承关系C-&gt;{A,B}来说，其布局为 <code>[A虚表指针|A元素] [B虚表指针|B元素]</code>，注意到C本身不需要虚表指针，因为C的虚表其实就等价于A的虚表，因为它们的偏移量（<code>vptr[-16]</code>）均为0。也就是说，在单继承链中，对象均只有一个虚表指针，而多继承对象则有多个虚表指针。这样，在做<code>static_cast</code>的向下转型时只需将指针加上一个偏移量；而做<code>dynamic_cast</code>的向上转型时只需减去一个偏移量（从虚表中获得）。</li>
+<li>RTTI的信息放在虚表的负偏移处。如<code>vptr[-8]</code>存放多态类型的<code>typeinfo</code>，<code>vptr[-16]</code>存放多态类型到其最派生的类（Most Derived Class）的<strong>负</strong>偏移量<code>offset_to_top</code>。在<code>dynamic_cast</code>中。正是用基类对象指针加上<code>vptr[-16]</code>这个偏移量，得到上层派生对象的实例。</li>
+<li>对于偏移量不为0的基类虚表，其虚函数有所不同，前面会带一个<code>non-virtual thunk</code>。这是因为调用上层类的虚函数时，需要先调整<code>this</code>指针为上层对象的<code>this</code>，而带<code>thunk</code>的函数就会先进行转换再去调用原虚函数。</li>
+<li>对于虚继承，虚基类的派生类无法确定虚基类关于本对象<code>this</code>的偏移，因此需要在虚表中加入一项<code>vbase_offset</code>，表示基类关于<code>this</code>的偏移，一般在负偏移<code>vptr[-24]</code>处。反过来，当虚基类要调用其虚函数时，需要的偏移量也不同，对于派生类没有覆盖的虚函数，偏移为0；而派生类覆盖了的虚函数则偏移不为0。该偏移记录在<code>vcall_offset</code>中，在<code>offset_to_top</code>上方。</li>
+<li>（具体实现与具体编译器相关，上述内容在Clang中验证过）</li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/41309205">参考1</a></li>
+</ol>
+<h3 id="性能优化"><a class="markdownIt-Anchor" href="#性能优化"></a> 性能优化</h3>
+<ol>
+<li>
+<p>对于确定不会被继承的类，采用<code>final</code>修饰可能带来一定的性能提升，比如以下代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">A</span> &#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> <span class="number">1</span>; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">B</span> <span class="title">final</span> :</span> A &#123;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">()</span> <span class="keyword">const</span> <span class="keyword">override</span> </span>&#123; <span class="keyword">return</span> <span class="number">2</span>; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">call_f</span><span class="params">(B <span class="keyword">const</span>&amp; x)</span> </span>&#123; </span><br><span class="line">  <span class="keyword">return</span> x.f(); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于<code>struct B</code>有<code>final</code>修饰，编译器知道在<code>call_f</code>函数中调用虚函数<code>x.f()</code>一定是调用的<code>B::f</code>，在此就可以采用inline优化。</p>
+<p><a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/cppblog/the-performance-benefits-of-final-classes/">参考</a></p>
+</li>
+<li>
+<p>…</p>
+</li>
+</ol>
+<h2 id="惯用技巧"><a class="markdownIt-Anchor" href="#惯用技巧"></a> 惯用技巧</h2>
+<h3 id="模版-2"><a class="markdownIt-Anchor" href="#模版-2"></a> 模版</h3>
+<ol>
+<li>
+<p><strong>奇异递归模板模式</strong>（Curiously Recurring Template Pattern, CRTP）：把派生类作为基类的模板参数。</p>
+<p>应用：</p>
+<ul>
+<li>将派生类个共同代码以模版的形式提取处理，以减少派生类中的冗余代码。如多态<code>clone()</code>函数，<code>std::enable_shared_from_this</code>。</li>
+<li>根据派生类的类型做区分处理，如对象计数。</li>
+<li>产生不可被继承的类（final）：将CRTP基类的构造函数声明为私有，同时将对应类设为其友元。</li>
+<li>实现<strong>多态链调用（Polymorphic chaining）</strong>：链式调用时，涉及到基类的方法返回的是基类的引用，这样就导致了链式调用的对象被“向下转换”了。解决方法就是采用CRTP，基类的方法返回派生类的引用。</li>
+<li>提供静态的接口，可以充当类似Concept的用法（不过C++20后有Concept就不需要这个了）。</li>
+</ul>
+<p>为了同时兼顾静态多态与动态多态，可以设计用于动态多态的基类<code>Base</code>，用于静态多态的中间类<code>Base_CRTP&lt;T&gt;</code>，派生类为<code>class Derived : Base_CRTP&lt;Derived&gt;</code>。</p>
+<p>此外，为了防止派生CRTP类时在模版参数中填错派生类，可以在<code>CRTP&lt;T&gt;</code>基类中将构造函数定义为<code>private</code>的，同时设置<code>T</code>为友元。</p>
+<p>注意派生类与基类的方法同名导致的名字遮蔽问题。</p>
+<p>CRTP中经常要用到<code>static_cast&lt;T&amp;&gt;(this)</code>，显得代码和冗余。可以写一个模版类自动完成<code>static_cast</code>，详见参考5。</p>
+<p><a href="%5Bhttps://zh.wikipedia.org/wiki/%E5%A5%87%E5%BC%82%E9%80%92%E5%BD%92%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%5D(https://zh.wikipedia.org/wiki/%E5%A5%87%E5%BC%82%E9%80%92%E5%BD%92%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F)">参考1</a> <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern">参考2</a> <a target="_blank" rel="noopener" href="https://www.fluentcpp.com/2017/05/12/curiously-recurring-template-pattern/">参考3</a> <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/262254/crtp-to-avoid-dynamic-polymorphism/262984#262984">参考4</a> <a target="_blank" rel="noopener" href="https://www.fluentcpp.com/2017/05/19/crtp-helper/">参考5</a></p>
+</li>
+<li>
+<p><strong>类型擦除（Type Erasure）</strong>：使用单点多态实现包含不同实际类型的统一类型容器。</p>
+<p>仅仅看上面这句话其实很绕…但其实拆开来说很容易理解：提供一个统一的接口，实际上为一个可能包含不同实际类型的容器，并且这是通过多态实现的。类型擦除实际上将多态的细节隐藏在了统一接口的后面，使其可以像值类型一样使用。此外，由于类型擦除基于多态，其难以解决涉及超过二元参数的多分派行为。</p>
+<p>目前类型擦除广泛用于<code>std::function</code>、<code>std::any</code>、<code>std::variant</code>等类的实现中。还在提案中的<code>std::polymorphic_value</code>（让多态类型像值类型一样使用）也是采用类型擦除实现的。</p>
+<blockquote>
+<p>另一个小话题：<code>shared_ptr&lt;void&gt;</code>可以存放任何类型的对象指针，并且能调用到正确的析构函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">const</span> <span class="built_in">shared_ptr</span>&lt;<span class="keyword">void</span>&gt; <span class="title">sp</span><span class="params">( <span class="keyword">new</span> A )</span></span>;</span><br><span class="line">&#125; <span class="comment">// calls A::~A() here</span></span><br></pre></td></tr></table></figure>
+<p>因为其默认的deleter使用的是构造函数传入的类型，也是通过类型擦除实现的。</p>
+</blockquote>
+<p>由于涉及到多态，自然就需要对派生对象分配空间。考虑到储存的对象大多较小，**小对象优化（Small Object Optimization）**基本也是类型擦除容器必备的。C++ 11中考虑到了让这些类型支持自定义分配器（如<code>std::function</code>），然而在C++ 17中完全去除了这个设定。这是因为在类型擦除语境中难以恢复迭代器以支持在拷贝赋值期间的分配操作。</p>
+<p><a target="_blank" rel="noopener" href="https://quuxplusone.github.io/blog/2019/03/18/what-is-type-erasure/">参考1</a> <a target="_blank" rel="noopener" href="https://akrzemi1.wordpress.com/2013/11/18/type-erasure-part-i/">参考2</a> <a target="_blank" rel="noopener" href="https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Type_Erasure">参考3</a> <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/5450159/type-erasure-techniques">参考4</a> <a target="_blank" rel="noopener" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0302r1.html">参考5</a></p>
+</li>
+<li>
+<p>…</p>
+</li>
+</ol>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:duanhb1084@qq.com">dhbloo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://dhbloo.github.io/code/Cpp-Notes/">https://dhbloo.github.io/code/Cpp-Notes/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://dhbloo.github.io">dhb's Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="addthis_inline_share_toolbox pull-right"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5d74ab045bf52ffe" async></script><nav id="pagination"><div class="prev-post pull-left"><a href="/code/Proj-Reading-Notes/"><i class="fa fa-chevron-left">  </i><span>代码阅读笔记</span></a></div><div class="next-post pull-right"><a href="/slide/Realtime-GI/"><span>Realtime GI Introduction</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="disqus_thread"></div><script>var unused = null;
+var disqus_config = function () {
+  this.page.url = 'https://dhbloo.github.io/code/Cpp-Notes/';
+  this.page.identifier = 'code/Cpp-Notes/';
+  this.page.title = 'C++知识点笔记与踩坑记录';
+}
+var d = document, s = d.createElement('script');
+s.src = "https://" + 'myblog-mdqheoz6z0' +".disqus.com/embed.js";
+s.setAttribute('data-timestamp', '' + +new Date());
+(d.head || d.body).appendChild(s);</script></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By dhbloo</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">Welcome to my blog :)</div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.8.2"></script><script src="/js/fancybox.js?version=1.8.2"></script><script src="/js/sidebar.js?version=1.8.2"></script><script src="/js/copy.js?version=1.8.2"></script><script src="/js/fireworks.js?version=1.8.2"></script><script src="/js/transition.js?version=1.8.2"></script><script src="/js/scroll.js?version=1.8.2"></script><script src="/js/head.js?version=1.8.2"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
