@@ -1605,6 +1605,9 @@ a.fancybox:focus {
 .katex-wrap {
   overflow: auto;
 }
+.katex-wrap::-webkit-scrollbar {
+  display: none;
+}
 #sidebar {
   position: fixed;
   top: 0;
