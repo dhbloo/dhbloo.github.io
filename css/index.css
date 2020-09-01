@@ -1448,6 +1448,7 @@ a.fancybox:focus {
   outline: none;
 }
 .content img,
+#post img,
 #sidebar img {
   padding: 4px;
   max-width: 100%;
@@ -1459,6 +1460,7 @@ a.fancybox:focus {
   transition: all 0.2s;
 }
 .content img:hover,
+#post img:hover,
 #sidebar img:hover {
   -webkit-box-shadow: 0 0 8px 0 rgba(232,237,250,0.6), 0 2px 4px 0 rgba(232,237,250,0.5);
   box-shadow: 0 0 8px 0 rgba(232,237,250,0.6), 0 2px 4px 0 rgba(232,237,250,0.5);
